@@ -10,9 +10,6 @@ import image
 import recognize
 from rich import print_json
 
-
-
-
 DEBUG_MODE = False  # Debug模式，是否打印请求返回信息
 # PROXY = input('请输入代理，如不需要直接回车:')  # 代理，如果多次出现IP问题可尝试将自己所用的魔法设置为代理。例如：使用clash则设置为 'http://127.0.0.1:7890'
 PROXY = ''
@@ -203,19 +200,19 @@ async def init(xid, mail):
         'sec-fetch-site': 'cross-site',
         'user-agent': 'MainWindow Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
                       'PikPak/2.3.2.4101 Chrome/100.0.4896.160 Electron/18.3.15 Safari/537.36',
-        'accept-language': 'en',
+        'accept-language': 'zh-CN',
         'content-type': 'application/json',
         'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="100"',
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': '"Windows"',
-        'x-client-id': 'YvtoWO6HNHiuG98x',
+        'x-client-id': 'YvtoWO6GNHiuCl7x',
         'x-client-version': '2.3.2.4101',
         'x-device-id': xid,
         'x-device-model': 'electron%2F18.3.15',
         'x-device-name': 'PC-Electron',
-        'x-device-sign': 'wdi10.ce8280a2dc704cd49f0be1c4eca40059xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        'x-device-sign': 'wdi10.ce6450a2dc704cd49f0be1c4eca40053xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         'x-net-work-type': 'NONE',
-        'x-os-version': 'Win64',
+        'x-os-version': 'Win32',
         'x-platform-version': '1',
         'x-protocol-version': '301',
         'x-provider-name': 'NONE',
@@ -265,10 +262,18 @@ async def get_image(xid):
                 # 识别图片
                 select_id = recognize.run()
                 # 删除缓存图片
-                image.delete_img()
+                # image.delete_img()
             json_data = img_jj(frames, int(select_id), pid)
             f = json_data['f']
             npac = json_data['ca']
+            d_request_data = {
+                "pid": pid,
+                "device_id": xid,
+                "f": f
+            }
+            async with session.post(f"https://paperkiteidleplus.top/document/pikpak/hash.php", json=d_request_data, ssl=False) as response1:
+                response_data = await response1.json()
+                d = response_data['d']
             params = {
                 'pid': pid,
                 'deviceid': xid,
@@ -277,11 +282,12 @@ async def get_image(xid):
                 'n': npac[0],
                 'p': npac[1],
                 'a': npac[2],
-                'c': npac[3]
+                'c': npac[3],
+                'd': d
             }
             async with session.get(f"https://user.mypikpak.com/pzzl/verify", params=params, ssl=False,
-                                   proxy=PROXY) as response1:
-                response_data = await response1.json()
+                                   proxy=PROXY) as response2:
+                response_data = await response2.json()
             result = {'pid': pid, 'traceid': traceid, 'response_data': response_data}
             return result
 
@@ -333,12 +339,12 @@ async def verification(captcha_token, xid, mail):
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': '"Windows"',
         'x-captcha-token': captcha_token,
-        'x-client-id': 'YvtoWO6AYBiuCl7x',
+        'x-client-id': 'YvtoWO6GNHiuCl7x',
         'x-client-version': '2.3.2.4101',
         'x-device-id': xid,
         'x-device-model': 'electron%2F18.3.15',
         'x-device-name': 'PC-Electron',
-        'x-device-sign': 'wdi10.ce6450a2dc704bd49f0be5c4eca70053xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        'x-device-sign': 'wdi10.ce6450a2dc704cd49f0be1c4eca40053xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         'x-net-work-type': 'NONE',
         'x-os-version': 'Win32',
         'x-platform-version': '1',
@@ -383,7 +389,7 @@ async def verify(xid, verification_id, code):
         'x-device-id': xid,
         'x-device-model': 'electron%2F18.3.15',
         'x-device-name': 'PC-Electron',
-        'x-device-sign': 'wdi10.ce6450a3dc704cd49f0fe1c4eca40053xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        'x-device-sign': 'wdi10.ce6450a2dc704cd49f0be1c4eca40053xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         'x-net-work-type': 'NONE',
         'x-os-version': 'Win32',
         'x-platform-version': '1',
@@ -668,7 +674,7 @@ async def main(incode):
         if activation['add_days'] == 5:
             print(f'邀请码: {incode} ==> 邀请成功, 用时: {run_time} 秒')
             print(f'邮箱: {mail}')
-            print(f'密码: wwww1234')
+            print(f'密码: linyuan666')
             PUSH_MSG += f'邀请码: {incode} ==> 邀请成功\n邮箱: {mail}\n密码: linyuan666\n'
             return
         else:
