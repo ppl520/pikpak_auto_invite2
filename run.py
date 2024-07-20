@@ -150,7 +150,7 @@ async def get_mail():
         "min_name_length": 10,
         "max_name_length": 10
     }
-    url = 'https://api.internal.temp-mail.io/api/v3/email/new'
+    url = 'https://www.1secmail.com/api/v1/?action=genRandomMailbox&count=1'
     async with aiohttp.ClientSession() as session:
         async with session.post(url, json=json_data, ssl=False) as response:
             response_data = await response.json()
@@ -162,7 +162,7 @@ async def get_mail():
 async def get_code(mail, max_retries=10, delay=1):
     retries = 0
     while retries < max_retries:
-        url = f'https://api.internal.temp-mail.io/api/v3/email/{mail}/messages'
+        url = f'https://www.1secmail.com/api/v1/?action=getMessages&login={}mail'
         async with aiohttp.ClientSession() as session:
             async with session.get(url, ssl=False) as response:
                 html = await response.json()
