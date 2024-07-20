@@ -150,7 +150,7 @@ async def get_mail():
         "min_name_length": 10,
         "max_name_length": 10
     }
-    url = 'https://www.1secmail.com/api/v1/?action=genRandomMailbox&count=1'
+    url = 'https://api.internal.temp-mail.io/api/v3/email/new'
     async with aiohttp.ClientSession() as session:
         async with session.post(url, json=json_data, ssl=False) as response:
             response_data = await response.json()
@@ -162,7 +162,7 @@ async def get_mail():
 async def get_code(mail, max_retries=10, delay=1):
     retries = 0
     while retries < max_retries:
-        url = f'https://www.1secmail.com/api/v1/?action=getMessages&login={}mail'
+        url = f'https://api.internal.temp-mail.io/api/v3/email/{mail}/messages'
         async with aiohttp.ClientSession() as session:
             async with session.get(url, ssl=False) as response:
                 html = await response.json()
@@ -412,7 +412,7 @@ async def signup(xid, mail, code, verification_token):
         "email": mail,
         "verification_code": code,
         "verification_token": verification_token,
-        "password": "wwww1234",
+        "password": "linyuan666",
         "client_id": "YvtoWO6GNHiuCl7x"
     }
     headers = {
@@ -674,8 +674,8 @@ async def main(incode):
         if activation['add_days'] == 5:
             print(f'邀请码: {incode} ==> 邀请成功, 用时: {run_time} 秒')
             print(f'邮箱: {mail}')
-            print(f'密码: wwww1234')
-            PUSH_MSG += f'邀请码: {incode} ==> 邀请成功\n邮箱: {mail}\n密码: wwww1234\n'
+            print(f'密码: linyuan666')
+            PUSH_MSG += f'邀请码: {incode} ==> 邀请成功\n邮箱: {mail}\n密码: linyuan666\n'
             return
         else:
             print(f'邀请码: {incode} ==> 邀请失败, 用时: {run_time} 秒')
